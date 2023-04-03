@@ -17,6 +17,15 @@ This describes a product that lets anonymous users create, send, and submit form
 
 4. Anyone with the link to a form should be able to fill and submit it.
 
+5. Allow creators update forms that are already accessible to respondents. They can: 
+  - Change form title and/or description
+  - Add new form fields
+  - remove form fields
+  - Add/remove rules for conditional fields
+  - Add new options for dropdown fields
+  - Change the size allowed for file uploads
+  
+
 ### Data Models
 
 **Form**
@@ -26,6 +35,7 @@ This describes a product that lets anonymous users create, send, and submit form
 - description
 - reference       (For use in web links)
 - creationDate
+- lastModifiedDate
 - fields: Field[] 
 
 **Field**
@@ -115,6 +125,14 @@ This means the employer address field is only displayed if the following evaluat
 - Where `field.type` is `FILE`, upload the bytes to object storage and set the ID received as `fieldResponse.value`. Where this upload fails, the form submission is not successful and has to be retried.
 
 - Where `field.isRequired` is true, ensure that `fieldResponse.value` is not empty or null.
+
+**Update Form - Add/Update Field**
+
+- Set/Update the value of `form.lastModifiedDate`
+- Create any new field(s) or field condition(s), and add to `form.fields`.
+- If an existing field is to be deleted:
+  - Find the `FormResponse` for the form.
+  - Remove all `FieldResponse` where `fieldResponse.field.id` matches the ID of the field to be deleted.
 
 ### Possible Improvements
 
